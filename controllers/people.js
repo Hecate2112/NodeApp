@@ -1,24 +1,24 @@
 var People = require("../models/people");
 
-//GET - Return all people in the DB
-exports.findAllPeople = function(req, res) {
-    People.find(function(err, people) {
-        if (err) res.send(500, err.message);
+//GET - Return all people in the DB []
+exports.findPeople = function(req, res) {
+    if (req.query.id) {
+        People.findById(req.query.id, function(err, people) {
+            if (err) return res.send(500, err.message);
+            console.log("GET /people/" + req.query.id);
 
-        console.log("GET /people");
-        res.status(200).json(people);
-    });
+            res.status(200).json(people ? [people] : []);
+        });
+    } else {
+        People.find(req.query, function(err, people) {
+            if (err) res.send(500, err.message);
+            console.log("GET /people");
+
+            res.status(200).json(people);
+        });
+    }
 };
 
-//GET - Return a people with specified ID
-exports.findById = function(req, res) {
-    People.findById(req.params.id, function(err, people) {
-        if (err) return res.send(500, err.message);
-
-        console.log("GET /people/" + req.params.id);
-        res.status(200).json(people);
-    });
-};
 
 //POST - Insert a new people in the DB
 exports.addPeople = function(req, res) {
@@ -40,22 +40,26 @@ exports.addPeople = function(req, res) {
 
 //PUT - Update a register already exists
 exports.updatePeople = function(req, res) {
-    People.findById(req.params.id, function(err, people) {
-        people.name = req.body.name;
-        people.dni = req.body.dni;
-        people.phoneNumber = req.body.phoneNumber;
-        people.age = req.body.age;
+    People.findById(req.query.id, function(err, people) {
+        if (people) {
+            people.name = req.body.name;
+            people.dni = req.body.dni;
+            people.phoneNumber = req.body.phoneNumber;
+            people.age = req.body.age;
 
-        people.save(function(err) {
-            if (err) return res.status(500).send(err.message);
-            res.status(200).json(people);
-        });
+            people.save(function(err) {
+                if (err) return res.status(500).send(err.message);
+                res.status(200).json(people);
+            });
+        } else {
+            res.sendStatus(404);
+        }
     });
 };
 
 //DELETE - Delete a people with specified ID
 exports.deletePeople = function(req, res) {
-    People.findById(req.params.id, function(err, people) {
+    People.findById(req.query.id, function(err, people) {
         people.remove(function(err) {
             if (err) return res.status(500).send(err.message);
             res.status(200).send();

@@ -15,7 +15,9 @@ var PeopleCtrl = require("./controllers/people");
 var apiRouter = express.Router();
 apiRouter
    .route('/people')
-   .get(PeopleCtrl.findAllPeople)
+   .get(PeopleCtrl.findPeople)
+   .put(PeopleCtrl.updatePeople)
+   .delete(PeopleCtrl.deletePeople)
    .post(PeopleCtrl.addPeople);
 app.use("/api", apiRouter);
 
