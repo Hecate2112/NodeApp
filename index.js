@@ -10,20 +10,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 
-var PeopleCtrl = require("./controllers/people");
+var peopleRouter = require("./routes/people"),
+    animalsRouter = require("./routes/animals"),
+    carsRouter = require("./routes/cars"),
+    housesRouter = require("./routes/houses"),
+    moviesRouter = require("./routes/movies");
 
 var apiRouter = express.Router();
 apiRouter
-   .route('/people')
-   .get(PeopleCtrl.findPeople)
-   .put(PeopleCtrl.updatePeople)
-   .delete(PeopleCtrl.deletePeople)
-   .post(PeopleCtrl.addPeople);
+    .use(peopleRouter)
+    .use(animalsRouter)
+    .use(carsRouter)
+    .use(housesRouter)
+    .use(moviesRouter);
 app.use("/api", apiRouter);
 
-mongoose.connect('mongodb://localhost/local', function(err, res){
-    if(err) throw err;
-    console.log('Connected to database');
+mongoose.connect("mongodb://localhost/local", function(err, res) {
+    if (err) throw err;
+    console.log("Connected to database");
     app.listen(3000, function() {
         console.log("Node server running on http://localhost:3000");
     });
