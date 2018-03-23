@@ -25,6 +25,11 @@ exports.addMovie = function(req, res) {
     console.log("POST");
     console.log(req.body);
 
+    //TODO: lodash.isEmpty()
+    if(!req.body.name){
+        return res.status(418).send("I'm a teapot"); //412
+    }
+
     var movie = new Movie({
         name: req.body.name,
         year: req.body.year,

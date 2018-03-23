@@ -10,7 +10,7 @@ var express = require("express"),
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
-app.use(session({ secret: "keyboard cat", cookie: { maxAge: 60000 } }));
+app.use(session({ secret: "keyboard cat", cookie: { maxAge: 60000 }, logged: false }));
 
 var peopleRouter = require("./routes/people"),
     animalsRouter = require("./routes/animals"),

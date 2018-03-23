@@ -25,6 +25,11 @@ exports.addCar = function(req, res) {
     console.log("POST");
     console.log(req.body);
 
+    //TODO: lodash.isEmpty()
+    if(!req.body.trademark){
+        return res.status(418).send("I'm a teapot"); //412
+    }
+
     var car = new Car({
         trademark: req.body.trademark,
         model: req.body.model,

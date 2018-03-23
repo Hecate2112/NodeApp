@@ -25,6 +25,11 @@ exports.addAnimal = function(req, res) {
     console.log("POST");
     console.log(req.body);
 
+    //TODO: lodash.isEmpty()
+    if(!req.body.specie){
+        return res.status(418).send("I'm a teapot"); //412
+    }
+
     var animal = new Animal({
         specie: req.body.specie,
         color: req.body.color,

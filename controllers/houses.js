@@ -25,6 +25,11 @@ exports.addHouse = function(req, res) {
     console.log("POST");
     console.log(req.body);
 
+    //TODO: lodash.isEmpty()
+    if(!req.body.city){
+        return res.status(418).send("I'm a teapot"); //412
+    }
+
     var house = new House({
         city: req.body.city,
         bedrooms: req.body.bedrooms,
